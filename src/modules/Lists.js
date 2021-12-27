@@ -1,0 +1,32 @@
+export const cuisineList = [
+  "African",
+  "American",
+  "British",
+  "Cajun",
+  "Caribbean",
+  "Chinese",
+  "European",
+  "French",
+  "German",
+  "Greek",
+  "Indian",
+  "Italian",
+  "Japanese",
+  "Jewish",
+  "Korean",
+  "Latin American",
+  "Mediterranean",
+  "Mexican",
+  "Middle Eastern",
+  "Spanish",
+  "Thai",
+];
+
+export const dietList = [
+  "Gluten Free",
+  "Ketogenic",
+  "Vegeteranian",
+  "Vegan",
+  "Pescetarian",
+  "Paleo",
+];

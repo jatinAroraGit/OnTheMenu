@@ -1,15 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../App.css";
 import Zoom from "@mui/material/Zoom";
-import autocomplete from "autocompleter";
 import { Box as GBox } from "grommet";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormHelperText from "@mui/material/FormHelperText";
-import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import { Chip } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -17,12 +10,9 @@ import Snackbar from "@mui/material/Snackbar";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Padding } from "@mui/icons-material";
-type Inputs = {
-  example: string;
-  exampleRequired: string;
-  ingredient: string;
-};
+import { Select as MaterialSelect, ThemeContext } from "grommet";
+import { cuisineList, dietList } from "./Lists";
+
 let mockList = [
   { name: "apple" },
   { name: "apricot" },
@@ -34,21 +24,44 @@ let mockList = [
 
 const sk = process.env.REACT_APP_ALPHANUMERIC_CODE;
 const baseURL = process.env.BASE_URL;
-export default function FiltersForm() {
+export default function FiltersForm(props: any) {
   let [ingredientsList, setIngredientsList] = useState<any>([]);
   let [value, setValue] = useState("");
   let [errorText, setErrorText] = useState<string>("");
-  let [filterIngredients, setFilterIngredients] = useState<any>([]);
-  let [showSection, setShowSection] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>();
-  /*Get Request with body prams for getting ingrdeients for autocomplete options
-  Example URL : https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=[key]&query=appl&number=5
-  */
+  let [filterIngredients, setFilterIngredients] = useState<any>(
+    props.filters.excludeIngredients ? props.filters.excludeIngredients : []
+  );
+  // let [showSection, setShowSection] = useState(true);
+  let [cuisineType, setCuisineType] = useState(props.filters.cuisine);
+  let [dietType, setDietType] = useState(props.filters.diet);
+  let [showSnack, setShowSnack] = useState(false);
+  let ssValue: string = "";
+  console.log(props);
+  let cuisines: string[] = cuisineList;
+  let appliedFilters = {
+    excludeIngredients: [],
+    cuisine: "",
+    diet: "",
+  };
+  let diets: string[] = dietList;
+  if (props.filters) {
+    console.log("Applyin Pre Exisiting Filters");
+    appliedFilters = {
+      excludeIngredients: props.filters.excludeIngredients,
+      cuisine: props.filters.cuisine,
+      diet: props.filters.dietType,
+    };
+    if (props.filters.excludeIngredients) console.log("not empty");
+  } else {
+    appliedFilters = {
+      excludeIngredients: filterIngredients,
+      cuisine: cuisineType,
+      diet: dietType,
+    };
+  }
+
+  const { handleSubmit, control, reset } = useForm();
+
   let getIngredient = (query: any) => {
     console.log("Getting Ingrdients for " + query);
     query = query.trim();
@@ -82,7 +95,6 @@ export default function FiltersForm() {
 
   let updateIngredientFilters = (data: any) => {
     data = data.trim();
-    console.log(data);
 
     if (data != "") {
       data = data.toLowerCase();
@@ -96,10 +108,11 @@ export default function FiltersForm() {
       } else {
         console.log("Already added !");
         setErrorText("Already Added");
+        setShowSnack(true);
       }
 
       setValue("");
-      setShowSection(true);
+      // setShowSection(true);
     } else {
       setValue("");
       console.log("Error. Empty Value");
@@ -113,19 +126,72 @@ export default function FiltersForm() {
     setFilterIngredients([...arr]);
   };
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  let updateCusisineType = (data: string) => {
+    if (data) {
+      data = data.trim();
+      console.log("Cuisine Type : " + data);
+      setCuisineType(data);
+    }
+  };
+
+  let updateDietType = (data: string) => {
+    if (data) {
+      data = data.trim();
+      console.log("Diet Type : " + data);
+      setDietType(data);
+    }
+  };
+  const onSubmit: SubmitHandler<any> = (data) => {
+    console.log("REACT HOOK FORM SUBMITTING");
+    /*
+    let query = "";
+    if (filterIngredients.length > 0) {
+      appliedFilters.excludeIngredients = filterIngredients;
+    } else if (filterIngredients.length == 0) {
+      appliedFilters.excludeIngredients = [];
+    }
+    if (cuisineType != "") {
+      appliedFilters.cuisineType = cuisineType;
+    }
+    if (dietType != "") {
+      appliedFilters.dietType = dietType;
+    }
+    console.log("Applied Filters OBJ = ");
+    console.log(appliedFilters);
+    props.getFilterQuery(appliedFilters);
+    */
+  };
+
+  const submitFilters = () => {
+    let query = "";
+    if (filterIngredients.length > 0) {
+      appliedFilters.excludeIngredients = filterIngredients;
+    } else if (filterIngredients.length == 0) {
+      appliedFilters.excludeIngredients = [];
+    }
+    if (cuisineType != "") {
+      appliedFilters.cuisine = cuisineType;
+    }
+    if (dietType != "") {
+      appliedFilters.diet = dietType;
+    }
+    props.getFilterQuery(appliedFilters);
+  };
+
   return (
     <GBox direction="column">
-      <form style={{ padding: 2 }} onSubmit={handleSubmit(onSubmit)}>
-        <Box style={{ maxWidth: 300 }}>
-          {filterIngredients.length > 0 && showSection ? (
+      <GBox style={{ margin: 5 }} direction="column">
+        <p style={{ margin: 1 }}>Exclude Ingredients</p>
+        <Box style={{ maxWidth: 300, position: "relative" }}>
+          {filterIngredients.length > 0 ? (
             filterIngredients.map((item: any, index: number) => {
               return (
-                <Zoom in={showSection}>
+                <Zoom in={true}>
                   <Chip
                     key={item}
                     style={{
                       margin: 1,
+
                       background: "#E53935",
                       color: "#FFFFFF",
                     }}
@@ -137,94 +203,141 @@ export default function FiltersForm() {
               );
             })
           ) : (
-            <Box style={{ marginBottom: 40 }}></Box>
+            <Box style={{ marginBottom: 1 }}></Box>
           )}
         </Box>
 
-        <GBox style={{ margin: 5 }} direction="row">
-          <Autocomplete
-            style={{ padding: 0 }}
-            size="small"
-            clearOnBlur={false}
-            inputMode="text"
-            inputValue={value}
-            noOptionsText="Hit enter to add"
-            // options={ingredientsList.map((ingredient: any) => ingredient.name)}
-            options={mockList.map((ingredient: any) => ingredient.name)}
-            renderInput={(params) => (
-              <TextField
-                multiline={false}
-                color="secondary"
-                style={{ width: 300, height: 5 }}
-                {...params}
-                placeholder="Enter ingredient"
-                onKeyPress={(event) => {
-                  if (event.key == "Enter") {
-                    console.log("Adding on enter");
-                    updateIngredientFilters(value);
-                    setValue("");
-                  }
-                }}
+        <Autocomplete
+          style={{ padding: 0, margin: 0, marginTop: 4 }}
+          size="small"
+          clearOnBlur={false}
+          popupIcon={false}
+          inputMode="text"
+          inputValue={value}
+          noOptionsText="Hit enter to add"
+          // options={ingredientsList.map((ingredient: any) => ingredient.name)}
+          options={mockList.map((ingredient: any) => ingredient.name)}
+          renderInput={(params) => (
+            <TextField
+              multiline={false}
+              color="info"
+              style={{ width: 300 }}
+              {...params}
+              placeholder="Enter ingredient"
+              onKeyPress={(event) => {
+                console.log("**** ENTER EVENT *******");
+                console.log(event);
+                if (event.key == "Enter") {
+                  console.log("Adding on enter");
+                  updateIngredientFilters(value);
+                  setValue("");
+                }
+              }}
+            />
+          )}
+          onInputChange={(event: any, formValue: string, reason: any) => {
+            if (reason == "input") {
+              getIngredient(formValue);
+            } else if (reason == "reset" && value != "") {
+              console.log("auto adding");
+              updateIngredientFilters(formValue);
+            }
+          }}
+        />
+      </GBox>
+      {/*** 
+        <FormGroup>
+          <Controller
+            name="checktest"
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                control={<Checkbox {...field} />}
+                label="Vegan"
               />
             )}
-            onInputChange={(event: any, formValue: string, reason: any) => {
-              setErrorText("");
-              if (reason == "input") {
-                getIngredient(formValue);
-              } else if (reason == "reset" && value != "") {
-                console.log("auto adding");
-                updateIngredientFilters(formValue);
-              }
-            }}
           />
-        </GBox>
-        <div style={{ margin: 4, marginBottom: 16 }}>
-          <p
-            style={{
-              position: "absolute",
-              color: "#D32F2F",
-              fontWeight: "bold",
-            }}
-          >
-            {errorText}
-          </p>
-        </div>
-        <FormGroup>
-          <FormControlLabel control={<Checkbox name="vegan" />} label="Vegan" />
         </FormGroup>
-        <GBox direction="row">
-          <input
-            style={{ width: "fit-content", marginTop: 6 }}
-            type="checkbox"
-            placeholder="Is in country"
+*****************************/}
+      <GBox direction="column">
+        <p style={{ marginBottom: 2 }}>Cuisine</p>
+        <ThemeContext.Extend
+          value={{
+            select: { icons: { color: "#546E7A" } },
+            global: {
+              drop: { zIndex: "2400" },
+            },
+          }}
+        >
+          <MaterialSelect
+            style={{
+              color: "#000000",
+              height: 40,
+              width: 200,
+              fontWeight: "normal",
+            }}
+            options={cuisines}
+            placeholder="Select Cuisine"
+            value={cuisineType}
+            onChange={(val) => updateCusisineType(val.option)}
           />
-          <p style={{ padding: 0, margin: 0 }}>Gluten Free</p>
-        </GBox>
-        <GBox direction="row">
-          <input
-            style={{ width: "fit-content", marginTop: 6 }}
-            type="checkbox"
-            placeholder="Is in country"
+        </ThemeContext.Extend>
+      </GBox>
+      <GBox direction="column" style={{ zIndex: 2105 }}>
+        <p style={{ marginBottom: 2 }}>Diet Type</p>
+        <ThemeContext.Extend
+          value={{
+            select: {
+              icons: { color: "#546E7A" },
+            },
+            global: {
+              drop: { zIndex: "2400" },
+              hover: { background: "#C94C30" },
+            },
+          }}
+        >
+          <MaterialSelect
+            //    {...register("diet")}
+            style={{
+              color: "#000000",
+              height: 40,
+              width: 200,
+              fontWeight: "normal",
+            }}
+            options={diets}
+            value={dietType}
+            placeholder="Select a Diet"
+            onChange={(val) => updateDietType(val.option)}
           />
-          <p style={{ padding: 0, margin: 0 }}>Vegetarian</p>
-        </GBox>
-        <GBox direction="row">
-          <input
-            style={{ width: "fit-content", marginTop: 6 }}
-            type="checkbox"
-            placeholder="Is in country"
-          />
-          <p style={{ padding: 0, margin: 0 }}>Keto</p>
-        </GBox>
-        <Snackbar
-          open={false}
-          autoHideDuration={2000}
-          message="Note archived"
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        />
+        </ThemeContext.Extend>
+      </GBox>
 
-        <Button type="submit">Apply filters</Button>
-      </form>
+      <Snackbar
+        open={showSnack}
+        autoHideDuration={2000}
+        message={errorText}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        onClose={() => setShowSnack(false)}
+      />
+      <div
+        style={{ display: "flex", justifyContent: "center" }}
+        className="row"
+      >
+        <Button
+          style={{ margin: 10 }}
+          variant="outlined"
+          onClick={() => submitFilters()}
+        >
+          Apply
+        </Button>
+        <Button
+          style={{ margin: 10 }}
+          variant="outlined"
+          onClick={() => console.log("reset")}
+        >
+          Reset
+        </Button>
+      </div>
     </GBox>
   );
 }
