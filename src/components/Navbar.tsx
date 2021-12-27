@@ -1,12 +1,13 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
+import navBackground from "../img/navbarBg.jpg";
 
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
-import navBackground from "../img/navbarBg.jpg";
+
 import headerLogo from "../img/otmAbreviatedLogo.png";
 
 import { Avatar, Header } from "grommet";
@@ -78,25 +79,41 @@ export default function Navbar() {
     <Box
       style={{
         padding: 0,
-        backgroundImage: `url(${navBackground})`,
+        // backgroundImage: `url(${navBackground})`,
+        //  background: "linear-gradient(to right, #ffb347, #ffcc33)", //yellow gradient
+        background: "linear-gradient(to right, #ece9e6, #ffffff)", //white gradient
         backgroundPosition: "center",
         backgroundSize: "100%",
-        minHeight: 200,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        margin: 6,
+        // minHeight: 200,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+
         marginTop: 0,
       }}
     >
       <AppBar
-        style={{ padding: 0, background: "transparent", boxShadow: "none" }}
+        style={{
+          padding: 0,
+          background: "transparent",
+          boxShadow: "none",
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+        }}
+        elevation={0}
         position="relative"
       >
-        <div style={{ flexDirection: "row" }}>
+        <div
+          style={{
+            flexDirection: "row",
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+            background: "transparent",
+          }}
+        >
           <Header
             elevation="small"
             direction="row-responsive"
-            style={{ padding: 5 }}
+            style={{ padding: 5, background: "transparent" }}
           >
             <Avatar
               src={headerLogo}

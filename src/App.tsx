@@ -12,6 +12,9 @@ import NotFound from "./components/NotFound";
 import "ip";
 import { isPropertySignature } from "typescript";
 import FiltersForm from "./modules/FiltersForm";
+import Footer from "./components/Footer";
+import SearchResults from "./components/SearchResults";
+import ScrollToTop from "./modules/ScrollToTop";
 
 const themeOptions = createTheme({
   palette: {
@@ -22,7 +25,7 @@ const themeOptions = createTheme({
       contrastText: "#ffffff",
     },
     secondary: {
-      main: "#000000",
+      main: "#E40C2B",
       light: "#1879af",
       dark: "#02293b",
     },
@@ -30,10 +33,14 @@ const themeOptions = createTheme({
       main: "#c1121f",
     },
     warning: {
-      main: "#d2a902",
+      main: "#EBA63F",
     },
     success: {
       main: "#669bbc",
+    },
+    info: {
+      main: "#000000",
+      light: "#FFFFFF",
     },
   },
 });
@@ -41,17 +48,20 @@ const themeOptions = createTheme({
 function App() {
   function getIp() {}
   return (
-    <div id="rootDiv">
+    <div id="rootDiv" style={{ background: "F1EFEA" }}>
       <ThemeProvider theme={themeOptions}>
         <Router>
-          <Navbar></Navbar>
+          <ScrollToTop />
+          <Navbar />
           <Routes>
             <Route path="/" element={<Homepage />}></Route>
             <Route path="/home" element={<Homepage />}></Route>
+            <Route path="/search" element={<SearchResults />}></Route>
             <Route path="/about" element={<About />}></Route>
-            <Route path="/dev" element={<FiltersForm />}></Route>
+            <Route path="/dev" element={<Dev />}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Routes>
+          <Footer />
         </Router>
       </ThemeProvider>
     </div>
