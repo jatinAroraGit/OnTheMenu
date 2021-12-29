@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import navBackground from "../img/navbarBg.jpg";
-
+import "../styles/button.css";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Tabs from "@mui/material/Tabs";
@@ -11,12 +11,20 @@ import Typography from "@mui/material/Typography";
 import headerLogo from "../img/otmAbreviatedLogo.png";
 
 import { Avatar, Header } from "grommet";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  NavLink,
+  useLocation,
+  matchPath,
+} from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import Homepage from "./Homepage";
 import About from "./About";
 import Dev from "./Dev";
 import FiltersForm from "../modules/FiltersForm";
+import Button from "@mui/material/Button";
 const routes = [
   {
     path: "/about",
@@ -65,9 +73,27 @@ function a11yProps(index: number) {
   };
 }
 
+function useRouteMatch(patterns: readonly string[]) {
+  const { pathname } = useLocation();
+
+  for (let i = 0; i < patterns.length; i += 1) {
+    const pattern = patterns[i];
+    const possibleMatch = matchPath(pattern, pathname);
+    if (possibleMatch !== null) {
+      return possibleMatch;
+    }
+  }
+
+  return null;
+}
+
 export default function Navbar() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [value, setValue] = React.useState(0);
+  const [buttonState, setButtonState] = React.useState("");
+  const routeMatch = useRouteMatch(["/home", "/about", "/"]);
+  console.log(routeMatch);
+  const currentTab = routeMatch ? routeMatch.pathname : "";
 
   let navigate = useNavigate();
 
@@ -112,7 +138,7 @@ export default function Navbar() {
         >
           <Header
             elevation="small"
-            direction="row-responsive"
+            direction="row"
             style={{ padding: 5, background: "transparent" }}
           >
             <Avatar
@@ -122,8 +148,38 @@ export default function Navbar() {
             />
 
             <Box>
+              <NavLink
+                to="/home"
+                style={{ textDecorationLine: "none", marginRight: 10 }}
+                className={({ isActive }) =>
+                  "nonav-link" + (isActive ? "active" : "inactive")
+                }
+              >
+                <Button
+                  variant={currentTab == "/home" ? "contained" : "outlined"}
+                  color="secondary"
+                >
+                  Home
+                </Button>
+              </NavLink>
+
+              <NavLink
+                to="/about"
+                style={{ textDecorationLine: "none", marginRight: 10 }}
+                className={({ isActive }) =>
+                  "nonav-link" + (isActive ? "active" : "inactive")
+                }
+              >
+                <Button
+                  variant={currentTab == "/about" ? "contained" : "outlined"}
+                  color="secondary"
+                >
+                  About
+                </Button>
+              </NavLink>
+              {/*
               <Tabs
-                value={value}
+                value={currentTab}
                 onChange={handleChange}
                 textColor="secondary"
                 indicatorColor="secondary"
@@ -132,21 +188,25 @@ export default function Navbar() {
                 <Tab
                   onClick={() => navigate("/home")}
                   label="Home"
+                  value={"/home" || ""}
                   {...a11yProps(0)}
                 />
 
                 <Tab
                   onClick={() => navigate("/about")}
                   label="About"
+                  value="/about"
                   {...a11yProps(1)}
                 />
 
                 <Tab
-                  onClick={() => navigate("/dev")}
+                  onClick={() => navigate("*")}
                   label="Dev"
+                  value="/dev"
                   {...a11yProps(2)}
                 />
               </Tabs>
+              */}
             </Box>
           </Header>
         </div>
