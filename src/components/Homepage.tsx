@@ -15,6 +15,8 @@ import CardMedia from "@mui/material/CardMedia";
 import { Avatar, Box as GBox } from "grommet";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import bannerLogo from "../img/cookingPot.png";
+import bannerBackground from "../img/bannerBG.jpg";
+
 import "../styles/forms.css";
 import Button from "@mui/material/Button";
 import FiltersForm from "../modules/FiltersForm";
@@ -139,29 +141,52 @@ export default function Homepage() {
     <Box style={{ padding: 0 }}>
       <GBox
         style={{
-          background: "linear-gradient(to right, #ffb347, #ffcc33)",
+          // background: "linear-gradient(to right, #ffb347, #ffcc33)",
+          background: `url(${bannerBackground})`,
+          resize: "block",
+          backgroundSize: "contain",
           borderRadius: 20,
-          margin: 45,
-          padding: 45,
+          margin: 15,
+          padding: 15,
           alignItems: "center",
         }}
         direction="column"
       >
-        <div className="column" style={{ textAlign: "center" }}>
-          <Zoom in={true}>
-            <div>
-              <h2 style={{ padding: 0, margin: 0 }}>What's</h2>
-              <h1 style={{ padding: 0, margin: 0 }}>On The Menu</h1>
-              <h2 style={{ padding: 0, margin: 0 }}>Today</h2>
-            </div>
-          </Zoom>
-        </div>
-        <div className="column" style={{ textAlign: "center" }}>
-          <Avatar
-            src={bannerLogo}
-            size={"3xl"}
-            style={{ marginLeft: 20, marginTop: 5, padding: 1 }}
-          />
+        <div
+          style={{
+            justifyContent: "center",
+            //background: "rgba(234, 56, 77, .8)",
+            background: "rgba(250, 186, 44, .8)",
+            width: window.screen.width < 700 ? 225 : 500,
+            //background: "rgba(255, 255, 255, .8)",
+            padding: 20,
+            borderRadius: 20,
+            backgroundAttachment: "",
+          }}
+        >
+          <div className="column" style={{ textAlign: "center" }}>
+            <Zoom in={true}>
+              <div>
+                <h2 style={{ padding: 0, margin: 0 }}>What's</h2>
+                <h1 style={{ padding: 0, margin: 0 }}>On The Menu</h1>
+                <h2 style={{ padding: 0, margin: 0 }}>Today</h2>
+              </div>
+            </Zoom>
+          </div>
+          <div
+            className="column"
+            style={{
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Avatar
+              src={bannerLogo}
+              size={"3xl"}
+              style={{ marginLeft: 20, marginTop: 5, padding: 1 }}
+            />
+          </div>
         </div>
       </GBox>
       <GBox direction="row-responsive">
