@@ -8,7 +8,13 @@ export default function Footer() {
   return (
     <GBox
       style={{
-        marginTop: 20,
+        marginTop: 80,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        width: "100%",
+        position: "relative",
+        clear: "both",
       }}
       direction="row-responsive"
     >
@@ -32,6 +38,7 @@ export default function Footer() {
                   margin: 0,
                   marginLeft: 10,
                   marginTop: 24,
+                  fontWeight: "bold",
                 }}
               >
                 On The Menu
@@ -54,33 +61,45 @@ export default function Footer() {
                 textAlign: "right",
               }}
             >
-              Created by Jatin Arora
+              Created by
+            </h4>
+            <h4
+              style={{
+                color: "#FFFFFF",
+                fontWeight: "bold",
+                margin: 0,
+                marginBottom: 5,
+                marginTop: 2,
+                textAlign: "right",
+              }}
+            >
+              Jatin Arora
             </h4>
             <GBox direction="column" style={{ textAlign: "right" }}>
-              <Link
-                style={{ color: "#FFFFFF", marginBottom: 5 }}
-                underline="none"
+              <a
+                style={{
+                  color: "#FFFFFF",
+                  marginBottom: 5,
+                }}
                 href="https://www.github.com/jatinAroraGit"
               >
                 Github
-              </Link>
-              <Link
+              </a>
+              <a
                 style={{ color: "#FFFFFF", marginBottom: 5 }}
-                underline="none"
                 href="https://www.linkedin.com/in/jatinarora08/"
               >
                 Linkedin
-              </Link>
-              <Link
+              </a>
+              <a
                 style={{
                   color: "#FFFFFF",
                   marginBottom: 15,
                 }}
-                underline="none"
                 href="mailto:jatin.arora08@outlook.com"
               >
                 Email
-              </Link>
+              </a>
             </GBox>
           </GBox>
         </Grid>

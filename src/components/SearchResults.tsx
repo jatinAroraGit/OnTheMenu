@@ -156,7 +156,7 @@ export default function SearchResults(props: any) {
         <Box
           sx={{
             flexGrow: 1,
-            padding: 2,
+            padding: 0,
             alignItems: "center",
             display: "flex",
             justifyContent: "flex",
@@ -188,13 +188,15 @@ export default function SearchResults(props: any) {
                 </Grid>
               ))
             ) : (
-              <p style={{ color: "#faba2c", margin: 0 }}> loading.. </p>
+              <p style={{ color: "#faba2c", margin: 0 }}> </p>
             )}
           </Grid>
         </Box>
       </ThemeProvider>
 
       <Pagination
+        style={{ marginTop: 15 }}
+        color="primary"
         count={3}
         page={1}
         onChange={() => console.log("Next Page")}

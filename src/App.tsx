@@ -5,7 +5,13 @@ import "./styles/custom.css";
 import Navbar from "./components/Navbar";
 import Homepage from "./components/Homepage";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  Navigate,
+} from "react-router-dom";
 import About from "./components/About";
 import Dev from "./components/Dev";
 import NotFound from "./components/NotFound";
@@ -15,6 +21,7 @@ import FiltersForm from "./modules/FiltersForm";
 import Footer from "./components/Footer";
 import SearchResults from "./components/SearchResults";
 import ScrollToTop from "./modules/ScrollToTop";
+import ViewRecipe from "./components/ViewRecipe";
 
 const themeOptions = createTheme({
   palette: {
@@ -46,7 +53,6 @@ const themeOptions = createTheme({
 });
 
 function App() {
-  function getIp() {}
   return (
     <div id="rootDiv" style={{ background: "F1EFEA" }}>
       <ThemeProvider theme={themeOptions}>
@@ -54,15 +60,17 @@ function App() {
           <ScrollToTop />
           <Navbar />
           <Routes>
-            <Route path="/" element={<Homepage />}></Route>
+            <Route path="/" element={<Navigate to="/home" />}></Route>
             <Route path="/home" element={<Homepage />}></Route>
             <Route path="/search" element={<SearchResults />}></Route>
+            <Route path="/recipe/:id" element={<ViewRecipe />}></Route>
             <Route path="/about" element={<About />}></Route>
             <Route path="/dev" element={<Dev />}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Routes>
-          <Footer />
         </Router>
+
+        <Footer />
       </ThemeProvider>
     </div>
   );

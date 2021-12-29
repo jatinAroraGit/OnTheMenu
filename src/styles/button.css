@@ -1,0 +1,13 @@
+.nav-linkactive {
+  background-color: "#ff00ff !important";
+  outline: 2px solid black;
+  color: aquamarine;
+  border-top-left-radius: 18%;
+  border-top-right-radius: 18%;
+  border-bottom-left-radius: 18%;
+  border-bottom-right-radius: 18%;
+}
+.nav-linkinactive {
+  background-color: "#ffff00";
+  color: chartreuse;
+}
