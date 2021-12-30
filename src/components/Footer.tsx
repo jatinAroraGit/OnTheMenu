@@ -15,67 +15,75 @@ export default function Footer() {
         width: "100%",
         position: "relative",
         clear: "both",
+        background: "linear-gradient(to right, #ffb347, #ffcc33)",
       }}
       direction="row-responsive"
     >
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid style={{ background: "#A64A35" }} item xs={6}>
+        <Grid item xs={6}>
           <GBox
-            direction="row-responsive"
-            style={{ marginBottom: 8, textAlign: "center" }}
+            direction="column"
+            style={{
+              marginBottom: 8,
+              textAlign: "center",
+              padding: 10,
+              alignItems: "center",
+            }}
           >
             <Avatar
               src={logo}
               align="flex-end"
               size={"large"}
-              style={{ marginLeft: 75, marginTop: 5, padding: 1 }}
+              style={{ marginTop: 5, padding: 1 }}
             />
-            <div className="column">
-              <p
-                style={{
-                  color: "#FFFFFF",
-                  fontSize: 18,
-                  margin: 0,
-                  marginLeft: 10,
-                  marginTop: 24,
-                  fontWeight: "bold",
-                }}
-              >
-                On The Menu
-              </p>
-              <p style={{ color: "#FFFFFF", fontSize: 12, margin: 0 }}>
-                Made using Spoonacular API
-              </p>
-            </div>
-          </GBox>
-        </Grid>
-        <Grid style={{ background: "#A64A35" }} item xs={6}>
-          <GBox direction="column" style={{ marginRight: 20 }}>
-            <h4
-              style={{
-                color: "#000000",
-                fontWeight: "bold",
-                margin: 0,
-                marginBottom: 5,
-                marginTop: 10,
-                textAlign: "right",
-              }}
-            >
-              Created by
-            </h4>
-            <h4
+
+            <p
               style={{
                 color: "#FFFFFF",
-                fontWeight: "bold",
+                fontSize: 18,
                 margin: 0,
-                marginBottom: 5,
-                marginTop: 2,
-                textAlign: "right",
+
+                marginTop: 4,
+                fontWeight: "bold",
               }}
             >
-              Jatin Arora
-            </h4>
-            <GBox direction="column" style={{ textAlign: "right" }}>
+              On The Menu
+            </p>
+            <p style={{ color: "#FFFFFF", fontSize: 12, margin: 0 }}>
+              Made using Spoonacular API
+            </p>
+          </GBox>
+        </Grid>
+        <Grid item xs={6}>
+          <GBox
+            direction="column"
+            style={{ marginRight: 20, alignItems: "center" }}
+          >
+            <GBox direction="column" style={{ textAlign: "left" }}>
+              <h4
+                style={{
+                  color: "#000000",
+                  fontWeight: "bold",
+                  margin: 0,
+                  marginBottom: 5,
+                  marginTop: 10,
+                  textAlign: "left",
+                }}
+              >
+                Developed by
+              </h4>
+              <h4
+                style={{
+                  color: "#FFFFFF",
+                  fontWeight: "bold",
+                  margin: 0,
+                  marginBottom: 5,
+                  marginTop: 2,
+                  textAlign: "left",
+                }}
+              >
+                Jatin Arora
+              </h4>
               <a
                 style={{
                   color: "#FFFFFF",
@@ -106,71 +114,4 @@ export default function Footer() {
       </Grid>
     </GBox>
   );
-  /*
-  return (
-    <GBox alignContent="end" style={{ background: "#000000", padding: 10 }}>
-      <GBox direction="row-responsive" style={{ marginBottom: 8 }}>
-        <Avatar
-          src={logo}
-          align="flex-end"
-          size={"large"}
-          style={{ marginLeft: 20, marginTop: 5, padding: 1 }}
-        />
-        <div className="column">
-          <p
-            style={{
-              color: "#FFFFFF",
-              fontSize: 18,
-              margin: 0,
-              marginLeft: 7,
-              marginTop: 20,
-            }}
-          >
-            On The Menu
-          </p>
-
-          <p style={{ color: "#FFFFFF", fontSize: 10, margin: 0 }}>
-            Made using Spoonacular API
-          </p>
-        </div>
-      </GBox>
-      <GBox direction="column">
-        <h4
-          style={{
-            color: "#FFFFFF",
-            fontWeight: "lighter",
-            margin: 0,
-            marginBottom: 5,
-            textDecoration: "underline",
-          }}
-        >
-          Create by Jatin Arora
-        </h4>
-        <GBox direction="row-responsive">
-          <Link
-            style={{ marginBottom: 5, marginRight: 10 }}
-            underline="none"
-            href="https://www.github.com/jatinAroraGit"
-          >
-            Github
-          </Link>
-          <Link
-            style={{ marginBottom: 5, marginRight: 10 }}
-            underline="none"
-            href="https://www.linkedin.com/in/jatinarora08/"
-          >
-            Linkedin
-          </Link>
-          <Link
-            style={{ marginBottom: 5, marginRight: 10 }}
-            underline="none"
-            href="mailto:jatin.arora08@outlook.com"
-          >
-            Email
-          </Link>
-        </GBox>
-      </GBox>
-    </GBox>
-  );
-  */
 }

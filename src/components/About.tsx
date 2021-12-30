@@ -53,7 +53,7 @@ export default function About() {
             <Avatar
               src={logo}
               size={"2xl"}
-              style={{ marginLeft: 20, marginTop: 5, padding: 1 }}
+              style={{ marginTop: 5, padding: 1 }}
             />
           </div>
           <div
@@ -66,7 +66,7 @@ export default function About() {
           >
             <h3>
               On The Menu is a web app that uses limited/free version of
-              Spoonacular API. It is a built as a showcase for front end UI
+              Spoonacular API. It is built as a showcase for front end UI
               development.
             </h3>
             <Button

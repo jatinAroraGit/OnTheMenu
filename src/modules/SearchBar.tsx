@@ -281,6 +281,8 @@ export default function SearchBar(props: any) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         disableAutoFocus={true}
+        disableEnforceFocus={true}
+        disableRestoreFocus={true}
       >
         <Box sx={modalStyle}>
           <FiltersForm
@@ -303,7 +305,7 @@ export default function SearchBar(props: any) {
               style={{
                 padding: 1,
                 background: "#FFFFFF",
-                left: 300,
+                left: 135,
                 bottom: 10,
               }}
             >
