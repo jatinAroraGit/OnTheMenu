@@ -56,21 +56,33 @@ function App() {
   return (
     <div id="rootDiv" style={{ background: "F1EFEA" }}>
       <ThemeProvider theme={themeOptions}>
-        <Router>
-          <ScrollToTop />
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Navigate to="/home" />}></Route>
-            <Route path="/home" element={<Homepage />}></Route>
-            <Route path="/search" element={<SearchResults />}></Route>
-            <Route path="/recipe/:id" element={<ViewRecipe />}></Route>
-            <Route path="/about" element={<About />}></Route>
-            <Route path="/dev" element={<Dev />}></Route>
-            <Route path="*" element={<NotFound />}></Route>
-          </Routes>
-        </Router>
-
-        <Footer />
+        <div style={{ minHeight: "calc(100vh - 44px)" }}>
+          <Router>
+            <ScrollToTop />
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Navigate to="/home" />}></Route>
+              <Route path="/home" element={<Homepage />}></Route>
+              <Route path="/search" element={<SearchResults />}></Route>
+              <Route path="/recipe/:id" element={<ViewRecipe />}></Route>
+              <Route path="/about" element={<About />}></Route>
+              <Route path="/dev" element={<Dev />}></Route>
+              <Route path="*" element={<NotFound />}></Route>
+            </Routes>
+          </Router>
+        </div>
+        <div
+          style={{
+            position: "relative",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            minHeight: 50,
+            backgroundColor: "#FF00ff",
+          }}
+        >
+          <Footer />
+        </div>
       </ThemeProvider>
     </div>
   );

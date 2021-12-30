@@ -166,7 +166,10 @@ export default function SearchResults(props: any) {
             container
             spacing={{ xs: 1, md: 1 }}
             columns={{ xs: 1, sm: 1, md: 12, lg: 12 }}
-            style={{ padding: 0, margin: 0 }}
+            style={{
+              padding: 0,
+              margin: 0,
+            }}
           >
             {!loading ? (
               recipesList.map((item: any, index: number) => (

@@ -26,7 +26,7 @@ const styles = {
     padding: 7,
     paddingRight: 0,
     marginTop: 26,
-    width: window.screen.width < 480 ? 380 : 500,
+    width: window.screen.width < 700 ? window.screen.width - 30 : 500,
 
     height: 160,
   },
