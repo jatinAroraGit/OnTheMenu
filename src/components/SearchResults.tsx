@@ -101,8 +101,12 @@ export default function SearchResults(props: any) {
     stateVar.state ? stateVar.state.recipeList.results : []
   );
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [filtersData, setFiltersData] = useState({});
+  const [newPage, setNewPage] = useState(0);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentRecipes, setCurrentRecipes] = useState<any>(
+    recipesList.length > 15 ? recipesList.slice(0, 14) : recipesList
+  );
   const [filterQuery, setFilterQuery] = useState("");
   const [showAnimation, setShowAnimation] = useState(false);
 
@@ -118,6 +122,11 @@ export default function SearchResults(props: any) {
     console.log("getting new list");
     console.log(newList);
     setRecipesList([...newList.results]);
+    if (newList.results.length > 15)
+      setCurrentRecipes(newList.results.slice(0, 14));
+    else {
+      setCurrentRecipes([...newList.results]);
+    }
     console.log(recipesList);
     setLoading(false);
   };
@@ -136,6 +145,25 @@ export default function SearchResults(props: any) {
     console.log(stateVar.state.recipeList);
     if (stateVar.state.recipeList) getSearchResults(stateVar.state.recipeList);
   }
+  const setNewPageData = (event: React.ChangeEvent<unknown>, value: number) => {
+    setNewPage(value);
+    console.log(value);
+    setLoading(true);
+    if (value == 2) {
+      console.log("Page 2");
+      let newList = recipesList.slice(15, recipesList.length - 1);
+      setCurrentRecipes([...newList]);
+      console.log(currentRecipes);
+    }
+    if (value == 1) {
+      console.log("page 1");
+      let newList = recipesList.slice(0, 14);
+      setCurrentRecipes([...newList]);
+      console.log(currentRecipes);
+    }
+    setLoading(false);
+  };
+
   return (
     <GBox
       direction="column"
@@ -152,58 +180,70 @@ export default function SearchResults(props: any) {
           getNewRecipeList={getNewRecipeList}
         />
       </GBox>
-      <ThemeProvider theme={theme}>
-        <Box
-          sx={{
-            flexGrow: 1,
-            padding: 0,
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "flex",
-          }}
-        >
-          <Grid
-            container
-            spacing={{ xs: 1, md: 1 }}
-            columns={{ xs: 1, sm: 1, md: 12, lg: 12 }}
-            style={{
+      {recipesList.length == 0 && (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Card
+            variant="elevation"
+            style={{ background: "#c94c30", borderRadius: 20, padding: 20 }}
+          >
+            <CardContent>
+              <GBox direction="row">
+                <h4 style={{ margin: 0 }}>Oops!</h4>
+              </GBox>
+              <p style={{ width: 300, fontWeight: "bold", fontSize: 16 }}>
+                No results were found
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {recipesList.length > 0 && (
+        <ThemeProvider theme={theme}>
+          <Box
+            sx={{
+              flexGrow: 1,
               padding: 0,
-              margin: 0,
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "flex",
             }}
           >
-            {!loading ? (
-              recipesList.map((item: any, index: number) => (
-                <Grid
-                  style={{
-                    padding: 0,
-                    margin: 0,
-                    justifyContent: "center",
-                    display: "flex",
-                  }}
-                  item
-                  xs={1}
-                  sm={1}
-                  md={6}
-                  lg={4}
-                  key={index}
-                >
-                  <RecipeCard recipeCardDetails={item}></RecipeCard>
-                </Grid>
-              ))
-            ) : (
-              <p style={{ color: "#faba2c", margin: 0 }}> </p>
-            )}
-          </Grid>
-        </Box>
-      </ThemeProvider>
-
-      <Pagination
-        style={{ marginTop: 15 }}
-        color="primary"
-        count={3}
-        page={1}
-        onChange={() => console.log("Next Page")}
-      />
+            <Grid
+              container
+              spacing={{ xs: 1, md: 1 }}
+              columns={{ xs: 1, sm: 1, md: 12, lg: 12 }}
+              style={{
+                padding: 0,
+                margin: 0,
+              }}
+            >
+              {!loading ? (
+                recipesList.map((item: any, index: number) => (
+                  <Grid
+                    style={{
+                      padding: 0,
+                      margin: 0,
+                      justifyContent: "center",
+                      display: "flex",
+                    }}
+                    item
+                    xs={1}
+                    sm={1}
+                    md={6}
+                    lg={4}
+                    key={index}
+                  >
+                    <RecipeCard recipeCardDetails={item}></RecipeCard>
+                  </Grid>
+                ))
+              ) : (
+                <p style={{ color: "#faba2c", margin: 0 }}> </p>
+              )}
+            </Grid>
+          </Box>
+        </ThemeProvider>
+      )}
     </GBox>
   );
 }
