@@ -44,7 +44,7 @@ const modalStyle = {
 };
 export default function SearchBar(props: any) {
   let navigate = useNavigate();
-
+  let showSuggestions = props.showSuggestions ? props.showSuggestions : false;
   let appliedFilters = {
     excludeIngredients: [],
     cuisine: "",
@@ -64,11 +64,42 @@ export default function SearchBar(props: any) {
 
     initSearchData = searchSessionData;
   } else initSearchData = null;
+
   const [showModal, setShowModal] = useState(false);
   const [filtersData, setFiltersData] = useState(
     initSearchData ? initSearchData.appliedFiltersObj : appliedFilters
   );
-  const [filterQuery, setFilterQuery] = useState(""); // string to show summary of applied filters on top of search bar.
+
+  let buildFilterQuery = () => {
+    console.log("Building Show Filter Query");
+    console.log(filtersData);
+    let filterString = "Filtering by ";
+    let filterFlag = false;
+    if (filtersData.cuisine != "") {
+      filterFlag = true;
+      filterString =
+        filterString + "Cusine type: " + filtersData.cuisine + "\n";
+    }
+    if (filtersData.diet != "") {
+      filterFlag = true;
+      filterString = filterString + " Diet type: " + filtersData.diet + "\n";
+    }
+    if (filtersData.excludeIngredients.length > 0) {
+      filterFlag = true;
+      filterString = filterString + "Not including any: ";
+      filtersData.excludeIngredients.forEach((item: string, index: number) => {
+        if (index < filtersData.excludeIngredients.length - 1)
+          filterString = filterString + item + ", ";
+        else filterString = filterString + item + " ";
+      });
+    }
+    if (filterFlag) {
+      return filterString;
+    } else {
+      return filterString + " None";
+    }
+  };
+  const [filterQuery, setFilterQuery] = useState(buildFilterQuery()); // string to show summary of applied filters on top of search bar.
   const [searchQuery, setSearchQuery] = useState("");
   const [searchString, setSearchString] = useState(
     initSearchData ? initSearchData.searchStringObj : ""
@@ -109,19 +140,24 @@ export default function SearchBar(props: any) {
   const handleClose = () => setShowModal(false);
 
   let getFiltersData = (filterData: any) => {
-    let filterString = "Filtering by ";
+    let filterFlag = false;
+    let filterString = `Filtering by `;
     setShowModal(false);
     appliedFilters.excludeIngredients = filterData.excludeIngredients;
     appliedFilters.cuisine = filterData.cuisine;
     appliedFilters.diet = filterData.diet;
+    console.log(appliedFilters);
     if (appliedFilters.cuisine != "") {
+      filterFlag = true;
       filterString =
-        filterString + "Cusine type: " + appliedFilters.cuisine + "\n";
+        filterString + "Cuisine type: " + appliedFilters.cuisine + " \n ";
     }
     if (appliedFilters.diet != "") {
+      filterFlag = true;
       filterString = filterString + " Diet type: " + appliedFilters.diet + "\n";
     }
-    if (appliedFilters.excludeIngredients) {
+    if (appliedFilters.excludeIngredients.length > 0) {
+      filterFlag = true;
       filterString = filterString + "Not including any: ";
       appliedFilters.excludeIngredients.forEach(
         (item: string, index: number) => {
@@ -131,11 +167,21 @@ export default function SearchBar(props: any) {
         }
       );
     }
-    setFilterQuery(filterString);
+    if (filterFlag) {
+      setFilterQuery(filterString);
+    } else {
+      setFilterQuery(filterString + " \n None ");
+    }
     setFiltersData(appliedFilters);
     return appliedFilters;
   };
-
+  const quickSearch = (query: string) => {
+    setSearchString(query);
+    let data = {
+      searchString: query,
+    };
+    onSubmit(data);
+  };
   /* use the below onSubmit function */
 
   const onSubmit: SubmitHandler<Inputs> = (data: any) => {
@@ -177,7 +223,7 @@ export default function SearchBar(props: any) {
           sk +
           "&instructionsRequired=true&addRecipeInformation=true&" +
           query +
-          "&number=10"
+          "&number=15"
       )
       .then(function(response) {
         console.log(
@@ -218,32 +264,33 @@ export default function SearchBar(props: any) {
 
   return (
     <form style={{ padding: 2 }} onSubmit={handleSubmit(onSubmit)}>
-      <p>{filterQuery}</p>
-      <GBox style={{ padding: 8 }} direction="row-responsive">
-        <input
-          {...register("searchString")}
-          //color={"#F1EFEA"}
-          color={"#FFFFFF"}
-          disabled={loadingResults}
-          defaultValue={searchString != "" ? searchString : ""}
-          style={{
-            height: 54,
-            fontSize: 24,
-            borderRadius: 25,
-            marginRight: 20,
-            background: "#FFFFFF",
-          }}
-          placeholder="Search For Recipes"
-        />
-        <GBox direction="row" style={{ justifyContent: "center" }}>
-          {loadingResults ? (
-            <Zoom in={true}>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <BounceLoader color="#faba2c" size={55} />
-              </div>
-            </Zoom>
-          ) : (
-            <>
+      {loadingResults ? (
+        <Zoom in={true}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <BounceLoader color="#faba2c" size={55} />
+          </div>
+        </Zoom>
+      ) : (
+        <>
+          <p>{filterQuery}</p>
+
+          <GBox style={{ padding: 0 }} direction="row-responsive">
+            <input
+              {...register("searchString")}
+              //color={"#F1EFEA"}
+              color={"#FFFFFF"}
+              disabled={loadingResults}
+              defaultValue={searchString != "" ? searchString : ""}
+              style={{
+                height: 54,
+                fontSize: 24,
+                borderRadius: 25,
+                marginRight: 20,
+                background: "#FFFFFF",
+              }}
+              placeholder="Search or Just Hit Enter"
+            />
+            <GBox direction="row" style={{ justifyContent: "center" }}>
               <div style={{ borderRadius: 100 }}>
                 <IconButton
                   style={{
@@ -270,11 +317,72 @@ export default function SearchBar(props: any) {
                   <FilterListIcon fontSize="inherit" />
                 </IconButton>
               </div>
-            </>
-          )}
-        </GBox>
-      </GBox>
+            </GBox>
+          </GBox>
+        </>
+      )}
 
+      {showSuggestions && (
+        <GBox
+          direction="column"
+          style={{ justifyContent: "space-between", marginTop: 20 }}
+        >
+          <GBox direction="column" style={{ marginRight: 90 }}>
+            <h3 style={{ margin: 2 }}>Top Searches</h3>
+
+            <GBox direction="row">
+              <Chip
+                onClick={(value: any) => quickSearch(value.target.outerText)}
+                color="primary"
+                disabled={loadingResults}
+                style={{ margin: 2, fontSize: 20, width: "fit-content" }}
+                label="Pasta"
+              />
+              <Chip
+                onClick={(value: any) => quickSearch(value.target.outerText)}
+                color="primary"
+                disabled={loadingResults}
+                style={{ margin: 2, fontSize: 20, width: "fit-content" }}
+                label="Pizza"
+              />
+              <Chip
+                onClick={(value: any) => quickSearch(value.target.outerText)}
+                color="primary"
+                disabled={loadingResults}
+                style={{ margin: 2, fontSize: 20, width: "fit-content" }}
+                label="Salads"
+              />
+            </GBox>
+          </GBox>
+          <GBox direction="column" style={{ marginLeft: 0 }}>
+            <h3 style={{ margin: 2 }}>For the sweet tooth</h3>
+
+            <GBox direction="row">
+              <Chip
+                onClick={(value: any) => quickSearch(value.target.outerText)}
+                color="primary"
+                disabled={loadingResults}
+                style={{ margin: 2, fontSize: 20, width: "fit-content" }}
+                label="Cupcakes"
+              />
+              <Chip
+                onClick={(value: any) => quickSearch(value.target.outerText)}
+                color="primary"
+                disabled={loadingResults}
+                style={{ margin: 2, fontSize: 20, width: "fit-content" }}
+                label="Ice Cream"
+              />
+              <Chip
+                onClick={(value: any) => quickSearch(value.target.outerText)}
+                color="primary"
+                disabled={loadingResults}
+                style={{ margin: 2, fontSize: 20, width: "fit-content" }}
+                label="Pudding"
+              />
+            </GBox>
+          </GBox>
+        </GBox>
+      )}
       <Modal
         open={showModal}
         onClose={() => handleClose}
@@ -305,7 +413,7 @@ export default function SearchBar(props: any) {
               style={{
                 padding: 1,
                 background: "#FFFFFF",
-                left: 135,
+                left: 152,
                 bottom: 10,
               }}
             >

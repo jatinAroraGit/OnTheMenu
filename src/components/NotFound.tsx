@@ -1,17 +1,14 @@
 import React from "react";
-import logo from "./logo.svg";
-
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import Container from "@mui/material/Container";
 import { Avatar, Box as GBox } from "grommet";
+import { useNavigate } from "react-router-dom";
 
 export default function NotFound() {
+  const navigate = useNavigate();
   return (
     <GBox
       style={{
@@ -54,6 +51,7 @@ export default function NotFound() {
               variant="contained"
               style={{ margin: 10 }}
               color="secondary"
+              onClick={() => navigate("/home")}
             >
               {" "}
               Go To Homepage

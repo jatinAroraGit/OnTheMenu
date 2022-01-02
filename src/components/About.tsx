@@ -66,8 +66,8 @@ export default function About() {
           >
             <h3>
               On The Menu is a web app that uses limited/free version of
-              Spoonacular API. It is built as a showcase for front end UI
-              development.
+              Spoonacular API so will only show 15 Results. It is built as a
+              showcase for front end UI development.
             </h3>
             <Button
               target="_top"

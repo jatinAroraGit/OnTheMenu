@@ -104,6 +104,7 @@ export default function Navbar() {
   return (
     <Box
       style={{
+        zIndex: 2400,
         padding: 0,
         // backgroundImage: `url(${navBackground})`,
         //  background: "linear-gradient(to right, #ffb347, #ffcc33)", //yellow gradient
@@ -144,7 +145,13 @@ export default function Navbar() {
             <Avatar
               src={headerLogo}
               size={"medium"}
-              style={{ marginLeft: 20, marginTop: 5, padding: 19 }}
+              onClick={() => navigate("/home")}
+              style={{
+                marginLeft: 20,
+                marginTop: 5,
+                padding: 19,
+                boxShadow: "none",
+              }}
             />
 
             <Box>

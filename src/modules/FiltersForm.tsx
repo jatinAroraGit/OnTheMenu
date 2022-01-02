@@ -12,7 +12,8 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Select as MaterialSelect, ThemeContext } from "grommet";
 import { cuisineList, dietList } from "./Lists";
-
+import ClearIcon from "@mui/icons-material/Clear";
+import IconButton from "@mui/material/IconButton";
 let mockList = [
   { name: "apple" },
   { name: "apricot" },
@@ -67,11 +68,10 @@ export default function FiltersForm(props: any) {
     query = query.trim();
     if (query != "") {
       setValue(query);
-      /**/
 
       axios
         .get(
-          "https://apii.spoonacular.com/food/ingredients/autocomplete?apiKey=" +
+          "https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=" +
             sk +
             "&query=" +
             query +
@@ -161,7 +161,12 @@ export default function FiltersForm(props: any) {
     props.getFilterQuery(appliedFilters);
     */
   };
-
+  const clearFilters = () => {
+    appliedFilters.excludeIngredients = [];
+    appliedFilters.cuisine = "";
+    appliedFilters.diet = "";
+    props.getFilterQuery(appliedFilters);
+  };
   const submitFilters = () => {
     let query = "";
     if (filterIngredients.length > 0) {
@@ -169,26 +174,27 @@ export default function FiltersForm(props: any) {
     } else if (filterIngredients.length == 0) {
       appliedFilters.excludeIngredients = [];
     }
-    if (cuisineType != "") {
-      appliedFilters.cuisine = cuisineType;
-    }
-    if (dietType != "") {
-      appliedFilters.diet = dietType;
-    }
+    //if (cuisineType != "")
+    appliedFilters.cuisine = cuisineType;
+
+    //if (dietType != "")
+    appliedFilters.diet = dietType;
+
     props.getFilterQuery(appliedFilters);
   };
 
   return (
     <GBox direction="column">
+      <h3 style={{ textAlign: "center", marginTop: 2 }}>FILTERS</h3>
       <GBox style={{ margin: 5 }} direction="column">
         <p style={{ margin: 1 }}>Exclude Ingredients</p>
         <Box style={{ maxWidth: 300, position: "relative" }}>
           {filterIngredients.length > 0 ? (
             filterIngredients.map((item: any, index: number) => {
               return (
-                <Zoom in={true}>
+                <Zoom key={index} in={true}>
                   <Chip
-                    key={item}
+                    key={index}
                     style={{
                       margin: 1,
 
@@ -216,7 +222,7 @@ export default function FiltersForm(props: any) {
           inputValue={value}
           noOptionsText="Hit enter to add"
           // options={ingredientsList.map((ingredient: any) => ingredient.name)}
-          options={mockList.map((ingredient: any) => ingredient.name)}
+          options={ingredientsList.map((ingredient: any) => ingredient.name)}
           renderInput={(params) => (
             <TextField
               multiline={false}
@@ -245,71 +251,78 @@ export default function FiltersForm(props: any) {
           }}
         />
       </GBox>
-      {/*** 
-        <FormGroup>
-          <Controller
-            name="checktest"
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                control={<Checkbox {...field} />}
-                label="Vegan"
-              />
-            )}
-          />
-        </FormGroup>
-*****************************/}
+
       <GBox direction="column">
-        <p style={{ marginBottom: 2 }}>Cuisine</p>
-        <ThemeContext.Extend
-          value={{
-            select: { icons: { color: "#546E7A" } },
-            global: {
-              drop: { zIndex: "2400" },
-            },
-          }}
-        >
-          <MaterialSelect
-            style={{
-              color: "#000000",
-              height: 40,
-              width: 200,
-              fontWeight: "normal",
+        <p style={{ marginBottom: 2, marginLeft: 5 }}>Cuisine</p>
+        <GBox direction="row" style={{ marginLeft: 5 }}>
+          <ThemeContext.Extend
+            value={{
+              select: { icons: { color: "#546E7A" } },
+              global: {
+                drop: { zIndex: "2400" },
+              },
             }}
-            options={cuisines}
-            placeholder="Select Cuisine"
-            value={cuisineType}
-            onChange={(val) => updateCusisineType(val.option)}
-          />
-        </ThemeContext.Extend>
+          >
+            <MaterialSelect
+              style={{
+                color: "#000000",
+                height: 40,
+                width: 265,
+                fontWeight: "normal",
+              }}
+              options={cuisines}
+              placeholder="Select Cuisine"
+              value={cuisineType}
+              onChange={(val) => updateCusisineType(val.option)}
+            />
+            <IconButton
+              onClick={() => setCuisineType("")}
+              size="small"
+              color="secondary"
+              style={{ margin: 5, marginRight: 0, marginLeft: 10, padding: 5 }}
+            >
+              <ClearIcon fontSize="small" />
+            </IconButton>
+          </ThemeContext.Extend>
+        </GBox>
       </GBox>
       <GBox direction="column" style={{ zIndex: 2105 }}>
-        <p style={{ marginBottom: 2 }}>Diet Type</p>
-        <ThemeContext.Extend
-          value={{
-            select: {
-              icons: { color: "#546E7A" },
-            },
-            global: {
-              drop: { zIndex: "2400" },
-              hover: { background: "#C94C30" },
-            },
-          }}
-        >
-          <MaterialSelect
-            //    {...register("diet")}
-            style={{
-              color: "#000000",
-              height: 40,
-              width: 200,
-              fontWeight: "normal",
+        <p style={{ marginBottom: 2, marginLeft: 5 }}>Diet Type</p>
+        <GBox direction="row" style={{ marginLeft: 5 }}>
+          <ThemeContext.Extend
+            value={{
+              select: {
+                icons: { color: "#546E7A" },
+              },
+              global: {
+                drop: { zIndex: "2400" },
+                hover: { background: "#C94C30" },
+              },
             }}
-            options={diets}
-            value={dietType}
-            placeholder="Select a Diet"
-            onChange={(val) => updateDietType(val.option)}
-          />
-        </ThemeContext.Extend>
+          >
+            <MaterialSelect
+              //    {...register("diet")}
+              style={{
+                color: "#000000",
+                height: 40,
+                width: 265,
+                fontWeight: "normal",
+              }}
+              options={diets}
+              value={dietType}
+              placeholder="Select a Diet"
+              onChange={(val) => updateDietType(val.option)}
+            />
+            <IconButton
+              onClick={() => setDietType("")}
+              size="small"
+              color="secondary"
+              style={{ margin: 5, marginRight: 0, marginLeft: 10, padding: 5 }}
+            >
+              <ClearIcon fontSize="small" />
+            </IconButton>
+          </ThemeContext.Extend>
+        </GBox>
       </GBox>
 
       <Snackbar
@@ -320,7 +333,7 @@ export default function FiltersForm(props: any) {
         onClose={() => setShowSnack(false)}
       />
       <div
-        style={{ display: "flex", justifyContent: "center" }}
+        style={{ display: "flex", justifyContent: "center", marginTop: 10 }}
         className="row"
       >
         <Button
@@ -333,9 +346,10 @@ export default function FiltersForm(props: any) {
         <Button
           style={{ margin: 10 }}
           variant="outlined"
-          onClick={() => console.log("reset")}
+          color="secondary"
+          onClick={() => clearFilters()}
         >
-          Reset
+          Clear
         </Button>
       </div>
     </GBox>

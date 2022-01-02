@@ -22,7 +22,7 @@ import Button from "@mui/material/Button";
 import FiltersForm from "../modules/FiltersForm";
 import IconButton from "@mui/material/IconButton";
 import SearchBar from "../modules/SearchBar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const sk = process.env.REACT_APP_ALPHANUMERIC_CODE;
 
 type Inputs = {
@@ -45,6 +45,7 @@ const modalStyle = {
 const recipeCardStyle = {};
 export default function Homepage() {
   const { state } = useLocation();
+  const navigate = useNavigate();
   let searchData: any;
   if (state) {
     const searchData = state.searchData;
@@ -82,14 +83,13 @@ export default function Homepage() {
     appliedFilters.diet = filterData.diet;
     console.log(appliedFilters);
     if (appliedFilters.cuisine != "") {
-      filterString =
-        filterString + "Cusine type: " + appliedFilters.cuisine + "\n";
+      filterString = filterString + "CUISINE: " + appliedFilters.cuisine + "\n";
     }
     if (appliedFilters.diet != "") {
-      filterString = filterString + " Diet type: " + appliedFilters.diet + "\n";
+      filterString = filterString + " DIET: " + appliedFilters.diet + "\n";
     }
     if (appliedFilters.excludeIngredients) {
-      filterString = filterString + "Not including any: ";
+      filterString = filterString + "NOT INCLUDING: ";
       appliedFilters.excludeIngredients.forEach(
         (item: string, index: number) => {
           if (index < appliedFilters.excludeIngredients.length - 1)
@@ -137,6 +137,15 @@ export default function Homepage() {
     console.log("query");
   };
 
+  const quickSearch = (value: any) => {
+    let query = value;
+    navigate("/search", {
+      state: {
+        searchQuery: query,
+      },
+    });
+  };
+
   return (
     <Box style={{ padding: 0 }}>
       <GBox
@@ -158,7 +167,6 @@ export default function Homepage() {
             //background: "rgba(234, 56, 77, .8)",
             background: "rgba(250, 186, 44, .8)",
             width: window.screen.width < 700 ? 225 : 500,
-            //background: "rgba(255, 255, 255, .8)",
             padding: 20,
             borderRadius: 20,
             backgroundAttachment: "",
@@ -187,41 +195,27 @@ export default function Homepage() {
               style={{ marginLeft: 20, marginTop: 5, padding: 1 }}
             />
           </div>
+          <h3 style={{ textAlign: "center" }}>Search 1000s of Recipes</h3>
+          <h3 style={{ textAlign: "center", margin: 4 }}>
+            Explore Different Cuisines and Diets
+          </h3>
         </div>
       </GBox>
-      <GBox direction="row-responsive">
-        <Box style={{ padding: 2, minWidth: 100 }}>
-          <Chip color="warning" style={{ margin: 2 }} label="Filters" />
-        </Box>
+
+      <GBox direction="row-responsive" style={{ padding: 40 }}>
         <Box
           style={{
-            background: "#F1EFEA",
             width: "100%",
-            alignItems: "flex-start",
+            background: "#FFFFFF",
+            borderRadius: 20,
+            padding: 30,
           }}
+          alignSelf="center"
         >
-          <Box flexDirection="row" style={{ padding: 2, minWidth: 100 }}>
-            <h4 style={{ margin: 2 }}>Today's Top Searches</h4>
-            <Chip
-              onClick={() => console.log("Meow")}
-              color="info"
-              style={{ margin: 2, fontSize: 20 }}
-              label="Pasta"
-              size={"medium"}
-            />
-            <Chip
-              color="info"
-              style={{ margin: 2, fontSize: 20 }}
-              label="Pizza"
-            />
-            <Chip
-              color="info"
-              style={{ margin: 2, fontSize: 20 }}
-              label="Vegan"
-            />
-          </Box>
-
-          <SearchBar></SearchBar>
+          <GBox>
+            <h3 style={{ margin: 2, textAlign: "center" }}>Start Searching</h3>
+            <SearchBar showSuggestions={true}></SearchBar>
+          </GBox>
         </Box>
       </GBox>
     </Box>
