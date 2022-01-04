@@ -41,6 +41,7 @@ const modalStyle = {
   borderColor: "#FFFF00",
   padding: 2,
   outlize: "none",
+  width: 300,
 };
 export default function SearchBar(props: any) {
   let navigate = useNavigate();
@@ -50,14 +51,11 @@ export default function SearchBar(props: any) {
     cuisine: "",
     diet: "",
   };
-  console.log("recieving props");
 
-  console.log(props);
   let initSearchData: any;
   if (props.searchData) {
     initSearchData = props.searchData;
   } else if (window.sessionStorage.getItem("searchSessionData")) {
-    console.log("Using Session Stored data");
     let sessionJSON = "";
     sessionJSON = window.sessionStorage.getItem("searchSessionData") || "";
     let searchSessionData = JSON.parse(sessionJSON);
@@ -71,8 +69,6 @@ export default function SearchBar(props: any) {
   );
 
   let buildFilterQuery = () => {
-    console.log("Building Show Filter Query");
-    console.log(filtersData);
     let filterString = "Filtering by ";
     let filterFlag = false;
     if (filtersData.cuisine != "") {
@@ -114,20 +110,12 @@ export default function SearchBar(props: any) {
     appliedFiltersObj: filtersData,
   };
 
-  if (state) {
-    //  console.log(state.filters);
-  }
-
   if (!window.sessionStorage.getItem("searchSessionData")) {
-    //  console.log("Creating new Cookie");
     window.sessionStorage.setItem(
       "searchSessionData",
       JSON.stringify(searchObj)
     );
   }
-
-  // console.log("Cookier");
-  //console.log(window.sessionStorage.getItem("searchSessionData"));
 
   const {
     register,
@@ -142,11 +130,12 @@ export default function SearchBar(props: any) {
   let getFiltersData = (filterData: any) => {
     let filterFlag = false;
     let filterString = `Filtering by `;
+
     setShowModal(false);
     appliedFilters.excludeIngredients = filterData.excludeIngredients;
     appliedFilters.cuisine = filterData.cuisine;
     appliedFilters.diet = filterData.diet;
-    console.log(appliedFilters);
+
     if (appliedFilters.cuisine != "") {
       filterFlag = true;
       filterString =
@@ -187,7 +176,6 @@ export default function SearchBar(props: any) {
   const onSubmit: SubmitHandler<Inputs> = (data: any) => {
     setLoadingResults(true);
     if (props.getLoadingState) props.getLoadingState(true);
-    console.log(data);
     let query = "";
     let searchQuery = data.searchString.trim();
     if (searchQuery != "") {
@@ -226,15 +214,10 @@ export default function SearchBar(props: any) {
           "&number=15"
       )
       .then(function(response) {
-        console.log(
-          "Request Sent \n " + response.status + "\n" + response.config.url
-        );
         if (response.data) {
-          console.log(response.data);
           if (props.getNewRecipeList) {
             props.getNewRecipeList(response.data);
           }
-          console.log("Hit");
           navigate("/search", {
             state: {
               searchData: searchObj,
@@ -251,19 +234,18 @@ export default function SearchBar(props: any) {
       .catch(function(error) {
         setLoadingResults(false);
         if (props.getLoadingState) props.getLoadingState(false);
-
-        console.log(error);
       })
       .then(function() {
         setLoadingResults(false);
         if (props.getLoadingState) props.getLoadingState(false);
-
-        console.log("DONE");
       });
   };
 
   return (
-    <form style={{ padding: 2 }} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      style={{ padding: 0, width: window.screen.width - 80 }}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       {loadingResults ? (
         <Zoom in={true}>
           <div style={{ display: "flex", justifyContent: "center" }}>
@@ -274,7 +256,7 @@ export default function SearchBar(props: any) {
         <>
           <p>{filterQuery}</p>
 
-          <GBox style={{ padding: 0 }} direction="row-responsive">
+          <GBox style={{ padding: 0, margin: 0 }} direction="row-responsive">
             <input
               {...register("searchString")}
               //color={"#F1EFEA"}
@@ -285,38 +267,43 @@ export default function SearchBar(props: any) {
                 height: 54,
                 fontSize: 24,
                 borderRadius: 25,
-                marginRight: 20,
+                marginRight: 15,
+                width: window.screen.width - 80,
                 background: "#FFFFFF",
               }}
-              placeholder="Search or Just Hit Enter"
+              placeholder="Search "
             />
-            <GBox direction="row" style={{ justifyContent: "center" }}>
-              <div style={{ borderRadius: 100 }}>
-                <IconButton
-                  style={{
-                    marginLeft: 5,
-                    background: "#faba2c",
-                    color: "#FFFFFF",
-                  }}
-                  size="large"
-                  onClick={handleSubmit(onSubmit)}
-                >
-                  <SearchIcon fontSize="inherit" />
-                </IconButton>
-              </div>
-              <div style={{ borderRadius: 100 }}>
-                <IconButton
-                  style={{
-                    marginLeft: 5,
-                    background: "#A64A35",
-                    color: "#FFFFFF",
-                  }}
-                  size="large"
-                  onClick={() => setShowModal(true)}
-                >
-                  <FilterListIcon fontSize="inherit" />
-                </IconButton>
-              </div>
+            <GBox direction="column" style={{ alignSelf: "center" }}>
+              <GBox direction="row" style={{ marginBottom: 6 }}>
+                <div style={{ borderRadius: 100 }}>
+                  <IconButton
+                    style={{
+                      margin: 0,
+                      marginRight: 2,
+                      background: "#faba2c",
+                      color: "#FFFFFF",
+                    }}
+                    size="large"
+                    onClick={handleSubmit(onSubmit)}
+                  >
+                    <SearchIcon fontSize="inherit" />
+                  </IconButton>
+                </div>
+                <div style={{ borderRadius: 100 }}>
+                  <IconButton
+                    style={{
+                      margin: 0,
+                      marginLeft: 2,
+                      background: "#A64A35",
+                      color: "#FFFFFF",
+                    }}
+                    size="large"
+                    onClick={() => setShowModal(true)}
+                  >
+                    <FilterListIcon fontSize="inherit" />
+                  </IconButton>
+                </div>
+              </GBox>
             </GBox>
           </GBox>
         </>
@@ -357,20 +344,19 @@ export default function SearchBar(props: any) {
           <GBox direction="column" style={{ marginLeft: 0 }}>
             <h3 style={{ margin: 2 }}>For the sweet tooth</h3>
 
-            <GBox direction="row">
+            <GBox
+              direction="row"
+              style={{
+                width: "fit-content",
+                padding: 0,
+              }}
+            >
               <Chip
                 onClick={(value: any) => quickSearch(value.target.outerText)}
                 color="primary"
                 disabled={loadingResults}
                 style={{ margin: 2, fontSize: 20, width: "fit-content" }}
-                label="Cupcakes"
-              />
-              <Chip
-                onClick={(value: any) => quickSearch(value.target.outerText)}
-                color="primary"
-                disabled={loadingResults}
-                style={{ margin: 2, fontSize: 20, width: "fit-content" }}
-                label="Ice Cream"
+                label="Cake"
               />
               <Chip
                 onClick={(value: any) => quickSearch(value.target.outerText)}
@@ -413,7 +399,7 @@ export default function SearchBar(props: any) {
               style={{
                 padding: 1,
                 background: "#FFFFFF",
-                left: 152,
+                left: 128,
                 bottom: 10,
               }}
             >

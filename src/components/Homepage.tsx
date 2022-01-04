@@ -75,13 +75,10 @@ export default function Homepage() {
 
   let getFiltersData = (filterData: any) => {
     let filterString = "Filtering by ";
-    console.log("Filters Data ");
-    console.log(filterData);
     setShowModal(false);
     appliedFilters.excludeIngredients = filterData.excludeIngredients;
     appliedFilters.cuisine = filterData.cuisine;
     appliedFilters.diet = filterData.diet;
-    console.log(appliedFilters);
     if (appliedFilters.cuisine != "") {
       filterString = filterString + "CUISINE: " + appliedFilters.cuisine + "\n";
     }
@@ -106,17 +103,11 @@ export default function Homepage() {
   /* use the below onSubmit function */
 
   const onSubmit: SubmitHandler<Inputs> = (data: any) => {
-    console.log(data);
-
     let query = "";
     let searchQuery = data.searchString.trim();
     if (searchQuery != "") {
       query = query + "query=" + searchQuery;
     }
-    //  let buildQuery = new URLSearchParams(filtersData);
-    //query = buildQuery.toString();
-
-    // console.log(query);
 
     if (filtersData.excludeIngredients.length > 0) {
       query = query + "&excludeIngredients=";
@@ -126,15 +117,12 @@ export default function Homepage() {
         } else query = query + item;
       });
     }
-    console.log("logging Applied Filters");
-    console.log(filtersData.cuisine);
     if (filtersData.cuisine != "") {
       query = query + "&cuisine=" + filtersData.cuisine;
     }
     if (filtersData.diet != "") {
       query = query + "&diet=" + filtersData.diet;
     }
-    console.log("query");
   };
 
   const quickSearch = (value: any) => {

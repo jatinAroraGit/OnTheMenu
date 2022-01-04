@@ -92,7 +92,6 @@ export default function Navbar() {
   const [value, setValue] = React.useState(0);
   const [buttonState, setButtonState] = React.useState("");
   const routeMatch = useRouteMatch(["/home", "/about", "/"]);
-  console.log(routeMatch);
   const currentTab = routeMatch ? routeMatch.pathname : "";
 
   let navigate = useNavigate();
