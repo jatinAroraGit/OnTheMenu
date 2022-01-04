@@ -37,7 +37,6 @@ export default function FiltersForm(props: any) {
   let [dietType, setDietType] = useState(props.filters.diet);
   let [showSnack, setShowSnack] = useState(false);
   let ssValue: string = "";
-  console.log(props);
   let cuisines: string[] = cuisineList;
   let appliedFilters = {
     excludeIngredients: [],
@@ -46,13 +45,11 @@ export default function FiltersForm(props: any) {
   };
   let diets: string[] = dietList;
   if (props.filters) {
-    console.log("Applyin Pre Exisiting Filters");
     appliedFilters = {
       excludeIngredients: props.filters.excludeIngredients,
       cuisine: props.filters.cuisine,
       diet: props.filters.dietType,
     };
-    if (props.filters.excludeIngredients) console.log("not empty");
   } else {
     appliedFilters = {
       excludeIngredients: filterIngredients,
@@ -64,7 +61,6 @@ export default function FiltersForm(props: any) {
   const { handleSubmit, control, reset } = useForm();
 
   let getIngredient = (query: any) => {
-    console.log("Getting Ingrdients for " + query);
     query = query.trim();
     if (query != "") {
       setValue(query);
@@ -82,14 +78,8 @@ export default function FiltersForm(props: any) {
         })
         .catch(function(error) {
           // handle error
-          console.log(error);
         })
-        .then(function() {
-          console.log("DONE");
-        });
-      /**/
-    } else {
-      console.log("Empty Query");
+        .then(function() {});
     }
   };
 
@@ -99,14 +89,10 @@ export default function FiltersForm(props: any) {
     if (data != "") {
       data = data.toLowerCase();
       let isItemDuplicate = filterIngredients.includes(data);
-      console.log(
-        "Adding " + data + " to list. Is it a duplicate: " + isItemDuplicate
-      );
 
       if (!isItemDuplicate) {
         filterIngredients.push(data);
       } else {
-        console.log("Already added !");
         setErrorText("Already Added");
         setShowSnack(true);
       }
@@ -115,21 +101,18 @@ export default function FiltersForm(props: any) {
       // setShowSection(true);
     } else {
       setValue("");
-      console.log("Error. Empty Value");
     }
   };
 
   let deleteIngredientFilter = (index: number) => {
     let arr = filterIngredients;
     arr.splice(index, 1);
-    console.log(arr);
     setFilterIngredients([...arr]);
   };
 
   let updateCusisineType = (data: string) => {
     if (data) {
       data = data.trim();
-      console.log("Cuisine Type : " + data);
       setCuisineType(data);
     }
   };
@@ -137,30 +120,10 @@ export default function FiltersForm(props: any) {
   let updateDietType = (data: string) => {
     if (data) {
       data = data.trim();
-      console.log("Diet Type : " + data);
       setDietType(data);
     }
   };
-  const onSubmit: SubmitHandler<any> = (data) => {
-    console.log("REACT HOOK FORM SUBMITTING");
-    /*
-    let query = "";
-    if (filterIngredients.length > 0) {
-      appliedFilters.excludeIngredients = filterIngredients;
-    } else if (filterIngredients.length == 0) {
-      appliedFilters.excludeIngredients = [];
-    }
-    if (cuisineType != "") {
-      appliedFilters.cuisineType = cuisineType;
-    }
-    if (dietType != "") {
-      appliedFilters.dietType = dietType;
-    }
-    console.log("Applied Filters OBJ = ");
-    console.log(appliedFilters);
-    props.getFilterQuery(appliedFilters);
-    */
-  };
+
   const clearFilters = () => {
     appliedFilters.excludeIngredients = [];
     appliedFilters.cuisine = "";
@@ -174,12 +137,8 @@ export default function FiltersForm(props: any) {
     } else if (filterIngredients.length == 0) {
       appliedFilters.excludeIngredients = [];
     }
-    //if (cuisineType != "")
     appliedFilters.cuisine = cuisineType;
-
-    //if (dietType != "")
     appliedFilters.diet = dietType;
-
     props.getFilterQuery(appliedFilters);
   };
 
@@ -227,14 +186,11 @@ export default function FiltersForm(props: any) {
             <TextField
               multiline={false}
               color="info"
-              style={{ width: 300 }}
+              style={{ width: 255 }}
               {...params}
               placeholder="Enter ingredient"
               onKeyPress={(event) => {
-                console.log("**** ENTER EVENT *******");
-                console.log(event);
                 if (event.key == "Enter") {
-                  console.log("Adding on enter");
                   updateIngredientFilters(value);
                   setValue("");
                 }
@@ -245,7 +201,6 @@ export default function FiltersForm(props: any) {
             if (reason == "input") {
               getIngredient(formValue);
             } else if (reason == "reset" && value != "") {
-              console.log("auto adding");
               updateIngredientFilters(formValue);
             }
           }}
@@ -267,7 +222,7 @@ export default function FiltersForm(props: any) {
               style={{
                 color: "#000000",
                 height: 40,
-                width: 265,
+                width: 220,
                 fontWeight: "normal",
               }}
               options={cuisines}
@@ -279,7 +234,7 @@ export default function FiltersForm(props: any) {
               onClick={() => setCuisineType("")}
               size="small"
               color="secondary"
-              style={{ margin: 5, marginRight: 0, marginLeft: 10, padding: 5 }}
+              style={{ margin: 5, marginRight: 10, marginLeft: 5, padding: 5 }}
             >
               <ClearIcon fontSize="small" />
             </IconButton>
@@ -305,7 +260,7 @@ export default function FiltersForm(props: any) {
               style={{
                 color: "#000000",
                 height: 40,
-                width: 265,
+                width: 220,
                 fontWeight: "normal",
               }}
               options={diets}
@@ -317,7 +272,7 @@ export default function FiltersForm(props: any) {
               onClick={() => setDietType("")}
               size="small"
               color="secondary"
-              style={{ margin: 5, marginRight: 0, marginLeft: 10, padding: 5 }}
+              style={{ margin: 5, marginRight: 10, marginLeft: 5, padding: 5 }}
             >
               <ClearIcon fontSize="small" />
             </IconButton>

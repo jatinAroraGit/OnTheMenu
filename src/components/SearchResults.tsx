@@ -119,15 +119,12 @@ export default function SearchResults(props: any) {
 
   let getNewRecipeList = (newList: any) => {
     setLoading(true);
-    console.log("getting new list");
-    console.log(newList);
     setRecipesList([...newList.results]);
     if (newList.results.length > 15)
       setCurrentRecipes(newList.results.slice(0, 14));
     else {
       setCurrentRecipes([...newList.results]);
     }
-    console.log(recipesList);
     setLoading(false);
   };
 
@@ -135,34 +132,11 @@ export default function SearchResults(props: any) {
     setLoading(isLoading);
   };
 
-  let getSearchResults = (data: any) => {
-    console.log("searching");
+  let getSearchResults = (data: any) => {};
 
-    console.log(data);
-  };
   if (stateVar.state) {
-    console.log("State Recipe List");
-    console.log(stateVar.state.recipeList);
     if (stateVar.state.recipeList) getSearchResults(stateVar.state.recipeList);
   }
-  const setNewPageData = (event: React.ChangeEvent<unknown>, value: number) => {
-    setNewPage(value);
-    console.log(value);
-    setLoading(true);
-    if (value == 2) {
-      console.log("Page 2");
-      let newList = recipesList.slice(15, recipesList.length - 1);
-      setCurrentRecipes([...newList]);
-      console.log(currentRecipes);
-    }
-    if (value == 1) {
-      console.log("page 1");
-      let newList = recipesList.slice(0, 14);
-      setCurrentRecipes([...newList]);
-      console.log(currentRecipes);
-    }
-    setLoading(false);
-  };
 
   return (
     <GBox

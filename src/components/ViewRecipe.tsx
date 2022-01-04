@@ -59,6 +59,7 @@ const styles = {
     margin: 0,
     justifyContent: "right",
     marginTop: 5,
+    textAlign: "left",
   },
   boldParagraph: {
     margin: 0,
@@ -92,12 +93,9 @@ export default function ViewRecipe(props: any) {
   let [loading, setLoading] = useState(true);
   let [error, setError] = useState("");
 
-  console.log("demo class object");
-
   let getRecipeDetails = async (id: string) => {
     let apiCall = true;
     let recipeDetail: any = new Recipe();
-    console.log("getting recipe details");
     if (!apiCall) {
       let testRecipe: any = new Recipe();
       testRecipe = mockRecipe;
@@ -107,7 +105,6 @@ export default function ViewRecipe(props: any) {
           recipeDetail[key] = testRecipe[key];
         });
 
-      console.log(recipeDetail);
       recipeDetail.summary = stripTags(recipeDetail.summary);
       setRecipe(recipeDetail);
     }
@@ -122,14 +119,12 @@ export default function ViewRecipe(props: any) {
         .then(function(response) {
           if (response.data) {
             let recipeDetail: any = new Recipe();
-            console.log("assigning object keys");
 
             Object.keys(response.data)
               .filter((key) => key in recipeDetail)
               .forEach((key) => {
                 recipeDetail[key] = response.data[key];
               });
-            console.log(recipeDetail);
             recipeDetail.summary = stripTags(recipeDetail.summary);
             setRecipe(recipeDetail);
             return response.data;
@@ -137,7 +132,6 @@ export default function ViewRecipe(props: any) {
             setError(
               "There was an error getting the recipe details. Try reloading the page."
             );
-            console.log(response);
             return 1;
           }
         })
@@ -145,20 +139,16 @@ export default function ViewRecipe(props: any) {
           setError(
             "We could not find any infromation for the Recipe you requested. Make sure you are connected to the internet or try refreshing."
           );
-          console.log(error);
           return 2;
         });
     }
   };
 
   useEffect(() => {
-    console.log(recipeId);
     setLoading(true);
     if (recipeId != "") {
       const fetchData = async () => {
         await getRecipeDetails(recipeId).then((data) => {
-          console.log("recipe info data obj");
-          console.log(recipe);
           setLoading(false);
         });
       };
@@ -376,8 +366,9 @@ export default function ViewRecipe(props: any) {
             <GBox direction="row-responsive" style={{ textAlign: "center" }}>
               <Grid
                 container
+                direction="row"
                 spacing={{ xs: 1, md: 1 }}
-                columns={{ xs: 1, sm: 12, md: 18, lg: 12 }}
+                columns={{ xs: 1, sm: 24, md: 24, lg: 12 }}
                 style={{
                   padding: 10,
                   margin: 0,
@@ -388,7 +379,14 @@ export default function ViewRecipe(props: any) {
                 {recipe.extendedIngredients.map((item: any) => {
                   return (
                     <Grid
-                      style={styles.ingredientsGridStyle}
+                      style={{
+                        padding: 0,
+                        margin: 0,
+                        justifyContent: "left",
+                        marginTop: 5,
+                        textAlign: "left",
+                        display: "flex",
+                      }}
                       item
                       xs={2}
                       sm={12}
