@@ -1,46 +1,36 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h2>On The Menu (https://on-the-menu.vercel.app/) </h2> 
 
-## Available Scripts
 
-In the project directory, you can run:
+<p align="center">
+  <img src="./media/otmFullLogo.png"  height="150" ></img>
+</p>
 
-### `yarn start`
+On The Menu (OTM) is a responsive react web app that brings you 1000s of recipes all over the internet filtered according to ingredietns, cuisine or diets you want.
+You can search for recipes and view step by step instruction to add something special to your menu at home. It uses Spoonacular API to enable the app to look for recipes.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Take a dive into the app:**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<https://on-the-menu.vercel.app/>
 
-### `yarn test`
+**Some Screenshots**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![home](media/homepage.jpg)
+<br/><br/> 
+![recipe results](media/recipeResults.jpg)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<br/><br/> 
+![filtering results](media/filteringRecipes.jpg)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<br/><br/> 
+![demo playlist](media/viewRecipe.jpg)
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Find the source code at: <https://github.com/jatinAroraGit/OnTheMenu>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Built Using React, TypeScript and CSS
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Code and project is not available to copy, reproduce, share or modify in any form. Any mention or description of this website or source code must be attributed to Jatin Arora
