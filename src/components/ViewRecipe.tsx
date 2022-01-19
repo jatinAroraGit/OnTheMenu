@@ -36,7 +36,6 @@ const styles = {
     borderColor: "#c94c30",
     borderStyle: "solid",
     padding: 2,
-
     borderRadius: 100,
     margin: 10,
     marginTop: 3,
@@ -213,7 +212,23 @@ export default function ViewRecipe(props: any) {
               align="center"
               style={{ alignItems: "center" }}
             >
-              <img style={styles.recipeImageStyle} src={recipe.image} />
+              <img
+                style={{
+                  flexShrink: 0,
+                  borderWidth: 8,
+                  borderColor: "#c94c30",
+                  borderStyle: "solid",
+                  padding: 2,
+                  borderRadius: 100,
+                  margin: 10,
+                  marginTop: 3,
+                  marginRight: 0,
+                  width: 180,
+                  height: 180,
+                  objectFit: "cover",
+                }}
+                src={recipe.image}
+              />
               <div
                 style={{
                   textAlign: "center",
